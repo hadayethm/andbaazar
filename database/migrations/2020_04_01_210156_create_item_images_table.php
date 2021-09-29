@@ -17,7 +17,7 @@ class CreateItemImagesTable extends Migration
             $table->bigIncrements('id');
             $table->foreignId('product_id')->constrained('products')->references('id')->onDelete('cascade');
             $table->string('color_slug')->default('main');
-            $table->foreignId('color_id')->default(0)->constrained('colors')->references('id')->onDelete('cascade');
+            //$table->foreignId('color_id')->default(0)->constrained('colors')->references('id')->onDelete('cascade');
             $table->integer('sort')->nullable();
             $table->text('org_img')->nullable();
             $table->text('list_img')->nullable();

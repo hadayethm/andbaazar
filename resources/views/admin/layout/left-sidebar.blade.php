@@ -42,7 +42,7 @@
                     <li class="{{ request()->is('andbaazaradmin/products/category*') ? 'active' : '' }}"><a class="sidebar-header" href="#"><i data-feather="shopping-bag"></i> <span>Shops</span><i class="fa fa-angle-right pull-right"></i></a>
                         <ul class="sidebar-submenu">
                             <li class="{{ request()->is('andbaazaradmin/products/tag/*') ? 'active' : '' }}"><a href="#" class="{{ request()->is('andbaazaradmin/products/tag') ? 'active' : '' }}"><i class="fa fa-circle"></i> <span>Krishi</span></a></li>
-                            <li class="{{ request()->is('andbaazaradmin/products/tag/*') ? 'active' : '' }}"><a href="#" class="{{ request()->is('andbaazaradmin/products/tag') ? 'active' : '' }}"><i class="fa fa-circle"></i> <span>Ecommerce</span></a></li>
+                            <li class="{{ request()->is('andbaazaradmin/shop/index/*') ? 'active' : '' }}"><a href="{{'andbaazaradmin\shop\index'}}" class="{{ request()->is('andbaazaradmin/shop/index') ? 'active' : '' }}"><i class="fa fa-circle"></i> <span>Ecommerce</span></a></li>
                             <li class="{{ request()->is('andbaazaradmin/products/tag/*') ? 'active' : '' }}"><a href="#" class="{{ request()->is('andbaazaradmin/products/tag') ? 'active' : '' }}"><i class="fa fa-circle"></i> <span>Auction</span></a></li>
                             <li class="{{ request()->is('andbaazaradmin/products/tag/*') ? 'active' : '' }}"><a href="#" class="{{ request()->is('andbaazaradmin/products/tag') ? 'active' : '' }}"><i class="fa fa-circle"></i> <span>SME</span></a></li>
                         </ul>

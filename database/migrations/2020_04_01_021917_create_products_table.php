@@ -19,7 +19,7 @@ class CreateProductsTable extends Migration
             $table->string('bn_name');
             $table->string('image')->nullable();
             $table->string('email')->nullable();
-            $table->string('slug');
+            $table->string('slug')->nullable();
             $table->decimal('price',8,2)->default(0);
             $table->string('model_no')->nullable();
             $table->decimal('org_price',8,2)->default(0);

@@ -17,6 +17,7 @@ class CreateBrandsTable extends Migration
             $table->bigIncrements('id');
             $table->string('name');
             $table->string('image')->nullable();
+            $table->enum('vendor',['ecommerce','sme','krishi']);
             $table->text('description')->nullable();
             $table->timestamps();
         });

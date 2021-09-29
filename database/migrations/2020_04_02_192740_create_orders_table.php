@@ -17,7 +17,7 @@ class CreateOrdersTable extends Migration
             $table->bigIncrements('id');
             $table->foreignId('customer_id')->constrained('users')->references('id')->onDelete('cascade');
             $table->string('order_number')->unique();
-            $table->foreignId('customer_billing_address_id')->constrained('customer_addresses')->references('id')->onDelete('cascade');
+            $table->foreignId('customer_address_id')->constrained('customer_addresses')->references('id')->onDelete('cascade');
             $table->foreignId('customer_shipping_address_id')->constrained('customer_addresses')->references('id')->onDelete('cascade');
             $table->foreignId('shipping_method_id')->constrained('shipping_methods')->references('id')->onDelete('cascade');
             $table->integer('subtotal')->default(0);

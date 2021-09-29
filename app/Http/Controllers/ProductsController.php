@@ -39,7 +39,8 @@ class ProductsController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request){
-      $product      = Product::with('rejectvalue')->where('shop_id',Baazar::shop()->id)->where('type','ecommerce');
+      $user = auth()->user()->id;
+      $product      = Product::with('rejectvalue')->where('user_id',$user)->where('type','ecommerce');
 
       $filter = [
         'category'  => '',
@@ -99,11 +100,12 @@ class ProductsController extends Controller
         $subCategories = Category::where('parent_id','!=',0)->get();
         $childCategory = Category::where('parent_id','!=',0)->get();
         $tag = Tag::all();
+        $brands = Brand::pluck('name','id'); 
         $sellerId = MerchantProfile::where('user_id',Auth::user()->id)->first();
         $shopProfile = Shop::where('user_id',Auth::user()->id)->where('type',Auth::user()->login_area)->first();
 
 
-        return view ('merchant.product.create',compact('category','categories','item','size','color','subCategories','tag','sellerId','shopProfile','childCategory'));
+        return view ('merchant.product.create',compact('category','categories','item','size','color','subCategories','tag','sellerId','shopProfile','childCategory','brands'));
     }
 
     public function tagSlug($tags){
@@ -170,13 +172,16 @@ class ProductsController extends Controller
 
     public function addImages($images, $itemId,$shop){
       foreach($images as $color => $image){
+        // dd($color);
         foreach($image as $img){
-          $cID = Color::where('slug',$color)->first();
+          // dd($img);
+          // $cID = Color::where('slug',$color)->first();
+          // dd($cID);
           $i = 0;
           $image = [
             'product_id' => $itemId,
             'color_slug' => $color,
-            'color_id'   => $cID ? $cID->id : 0,
+            // 'color_id'   => $cID ? $cID->id : 0,
             'sort'       => ++$i,
             'type'       => 'ecommerce',
             'org_img'    => Baazar::base64Upload($img,'orgimg',$shop->slug,$color),
@@ -186,13 +191,16 @@ class ProductsController extends Controller
       }
     }
 
-    public function store(Product $item, Request $request, Newsfeed $newsfeed){
+    public function store(Product $product, Request $request, Newsfeed $newsfeed){
       // dd($request->all());
-      $shop = MerchantProfile::where('user_id',Auth::user()->id)->first()->shop;
+      $shop = MerchantProfile::where('user_id',Auth::user()->id)->first();
+      // dd($shop->slug);
       $newsslug = Baazar::getUniqueSlug($newsfeed,$request->title);
-      if($shop){
-        $slug = Baazar::getUniqueSlug($item,$request->name);
+      if($shop){ 
+        $slug = Baazar::getUniqueSlug($product,$request->name); 
+        // dd($slug);
         $feature = Baazar::base64Upload($request->images['main'][0],$slug,$shop->slug,'featured');
+        // dd($feature);
           $data = [
               'name'          => $request->name,
               'bn_name'       => $request->bn_name,
@@ -217,12 +225,13 @@ class ProductsController extends Controller
               'user_id'       => Auth::user()->id,
               'created_at'    => now(),
           ];
+          // dd($data);
         $item = Product::create($data);
         $this->addInventory($request,$item->id,$shop->id,$item->slug);
         if($request->attribute){
           $this->addAttributes($request->attribute,$item->id);
         }
-        if($request->images){
+        if($request->images){ 
           $this->addImages($request->images,$item->id,$shop);
         }
 

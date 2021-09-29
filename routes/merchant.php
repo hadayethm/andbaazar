@@ -60,9 +60,9 @@ Route::group(['prefix' => 'merchant','middleware' => ['auth','merchant','default
         Route::put('products/rejected/{slug}','ProductsController@rejected');
 
 
-        Route::get('products','ProductsController@index')->middleware('isMerchantActive');
-        Route::get('products/new','ProductsController@create')->middleware('isMerchantActive');
-        Route::post('products/new','ProductsController@store')->name('product.store')->middleware('isMerchantActive');
+        Route::get('products','ProductsController@index');
+        Route::get('products/new','ProductsController@create');
+        Route::post('products/new','ProductsController@store')->name('product.store');
         Route::get('products/update/{slug}/productupdate','ProductsController@edit');
         Route::put('products/update/{slug}','ProductsController@update');
         Route::post('products/single-inventory-delete','ProductsController@deleteInventory');

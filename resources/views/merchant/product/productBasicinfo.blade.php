@@ -332,11 +332,14 @@
                             <label for="brand_id">Brands<span>*</span></label>
                             <select name="brand_id" class="form-control" id="brand">
                                 <option value="" selected>No Brand</option> 
+                                <!-- @foreach($brands as $key => $brand)
+                                <option value="{{ $key }}">{{ $brand }}</option>
+                                @endforeach -->
                             </select>
-                            <span class="text-danger" id="message_video_url"></span>
+                            <!-- <span class="text-danger" id="message_video_url"></span>
                             @if ($errors->has('video_url'))
                                 <span class="text-danger">{{ $errors->first('video_url') }}</span>
-                            @endif
+                            @endif -->
                         </div>
                     </div>
                     <div class="col-md-6">

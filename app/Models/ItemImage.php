@@ -16,7 +16,7 @@ class ItemImage extends Model
     'product_id',
     'color_slug',
     'type',
-    'color_id',
+    // 'color_id',
     'sort',
     'org_img',
     'list_img',

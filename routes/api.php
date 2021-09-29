@@ -78,3 +78,5 @@ Route::group(['prefix'=>'v-1','namespace'=>'Api'],function (){
 
     });
 });
+
+Route::get('test','SiteInfoController@test');
