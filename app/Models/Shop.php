@@ -64,4 +64,8 @@ class Shop extends Model
  public function auctionProduct(){
   return $this->hasMany(Auctionproduct::class,'shop_id');
 }
+
+public function krishiproduct(){
+  return $this->hasMany(KrishiProduct::class);
+}
 }

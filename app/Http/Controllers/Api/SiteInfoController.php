@@ -7,6 +7,7 @@ use App\Http\Resources\KrishiProductCategoryCollection;
 use App\Http\Resources\KrishiProductCollection;
 use App\Http\Resources\KrishiProductFlashSaleCollection;
 use App\Http\Resources\ShopCollection;
+use App\Http\Resources\ShopDeatialsCollection;
 use App\Models\FlashSellSetting;
 use App\Models\KrishiBazarSlider;
 use App\Models\KrishiCategory;
@@ -16,13 +17,16 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Traits\apiTrait;
 use Illuminate\Support\Facades\DB;
+use App\Http\Resources\ShopDeatialsResource;
+use App\Http\Resources\ShopProductResource;
 
 class SiteInfoController extends Controller
 {
     use apiTrait;
     public function productCategories(){
-        $productCategories = KrishiCategory::where([['active',1],['parent_id',0]])->get();
-        return new KrishiProductCategoryCollection($productCategories);
+        $list = KrishiCategory::select('id', 'name', 'slug')->where(['parent_id' => 0,'active' => 1])->orderBy('id', 'desc')->get();
+        
+        return new KrishiProductCategoryCollection( $list );
     }
 
     public function sliderList(){
@@ -51,7 +55,28 @@ class SiteInfoController extends Controller
         }
         $shops = Shop::where('status','Active')->orderBy('id','desc')->paginate($limit);
         $shops->appends(['limit' => $limit]);
+        if (is_null($shops)){
+            return $this->jsonResponseFaild('the requested shop was not found',false,404);
+        }
         return new ShopCollection($shops);
+    }
+
+    public function shopInfo($slug){
+        $shopDetails = Shop::where('status','Active')->where('slug',$slug)->first(); 
+        if (is_null( $shopDetails)){
+            return $this->jsonResponseFaild('the requested shop details was not found',false,404);
+        }
+      
+       return new ShopDeatialsResource($shopDetails);
+    }
+
+    public function productDetails($slug){
+       $productDetails = Shop::where('status','Active')->where('slug',$slug)->first(); 
+       if (is_null($productDetails)){
+        return $this->jsonResponseFaild('the requested product was not found',false,404);
+    }
+      
+       return new ShopProductResource($productDetails);
     }
 
     public function shopProducts(Request $request,$slug){
@@ -121,50 +146,76 @@ class SiteInfoController extends Controller
     }
 
     public function CategoryWiseProducts(Request $request,$parentCategory){
+ 
         $limit = 20;
         if($request->limit){
             $limit = $request->limit;
         }
+
         $paginationMeta = ['limit'=>$limit];
         $cat = KrishiCategory::where('slug',$parentCategory)->first();
-        $subCategories = $this->generateCategories($cat->childs);
-        array_push($subCategories,(int)$cat->id);
-        $products = KrishiProduct::whereIn('category_id', $subCategories)->where('status','active');
-        if($request->sortBy){
-            switch ($request->sortBy) {
-                case "newest":
-                    $products = $products->orderBy('id','desc');
-                    break;
-                case "popular":
-                    $products = $products->orderBy('total_unit_sold','desc');
-                    break;
-                case "price-lowest":
-                    $products = $products->orderBy('price','asc');
-                    break;
-                case "price-highest":
-                    $products = $products->orderBy('price','desc');
-                    break;
-                default:
-                    $products = $products;
-            }
-            $paginationMeta =  array_merge($paginationMeta,['sortBy'=>$request->sortBy]);
-        }
 
-        if($request->min){
-            $products = $products->where('price','>=',$request->min);
-            $paginationMeta =  array_merge($paginationMeta,['min'=>$request->min]);
+        if(!$cat){
+
+      
+            return response()->json(['msg' => 'the requested product was not found' , 'error'=>false, 'code'=>404], 404);
+
+        }else{
+
+            $subCategories = $this->generateCategories($cat->childs);
+            array_push($subCategories,(int)$cat->id);
+
+            if(!$subCategories){
+
+                return response()->json(['msg' => 'the requested product was not found' , 'error'=>false, 'code'=>404], 404);
+
+            }else{
+
+                $products = KrishiProduct::whereIn('category_id', $subCategories)->where('status','Active');
+
+                if($request->sortBy){
+                    switch ($request->sortBy) {
+                        case "newest":
+                            $products = $products->orderBy('id','desc');
+                            break;
+                        case "popular":
+                            $products = $products->orderBy('total_unit_sold','desc');
+                            break;
+                        case "price-lowest":
+                            $products = $products->orderBy('price','asc');
+                            break;
+                        case "price-highest":
+                            $products = $products->orderBy('price','desc');
+                            break;
+                        default:
+                            $products = $products;
+                    }
+                    $paginationMeta =  array_merge($paginationMeta,['sortBy'=>$request->sortBy]);
+                }
+        
+                if($request->min){
+                    $products = $products->where('price','>=',$request->min);
+                    $paginationMeta =  array_merge($paginationMeta,['min'=>$request->min]);
+                }
+                if($request->max){
+                    $products = $products->where('price','<=',$request->max);
+                    $paginationMeta =  array_merge($paginationMeta,['max'=>$request->max]);
+                }
+                if($request->tags){
+                    //will be come
+                    $paginationMeta =  array_merge($paginationMeta,['tags'=>$request->tags]);
+                }
+                $products = $products->paginate($limit);
+        
+        
+                $products->appends($paginationMeta);
+        
+                 return new KrishiProductCollection($products);
+            }
+
         }
-        if($request->max){
-            $products = $products->where('price','<=',$request->max);
-            $paginationMeta =  array_merge($paginationMeta,['max'=>$request->max]);
-        }
-        if($request->tags){
-            //will be come
-            $paginationMeta =  array_merge($paginationMeta,['tags'=>$request->tags]);
-        }
-        $products = $products->paginate($limit);
-        $products->appends($paginationMeta);
-        return new KrishiProductCollection($products);
+   
+
     }
 
     public function getSubCategories($slug){

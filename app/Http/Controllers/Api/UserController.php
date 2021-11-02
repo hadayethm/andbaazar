@@ -27,6 +27,7 @@ class UserController extends Controller
     use apiTrait;
     //    For user registration
     public function registration(Request $request){
+        // dd($request->all());
         $validator=Validator::make($request->all(), [
             'first_name'=>'required|string',
             'last_name'=>'required|string',
@@ -63,7 +64,15 @@ class UserController extends Controller
 
         //Now Send the OTP code via SMS Gateway
         $user->notify(new PhoneVerification($user));
-        return $this->jsonResponse([],"Your have been register successfully",false);
+        $userOtp = $user->phone_otp; 
+        $verifyOTP = User::where([['phone',$request->phone],['phone_otp',$userOtp]])->where('phone_otp_expired_at','>',Carbon::now())->first();
+        $verifyOTP->phone_otp = null;
+            $verifyOTP->phone_otp_expired_at = null;
+            $verifyOTP->phone_no_verified_at = Carbon::now();
+            $verifyOTP->save();
+            $tokenResult=$verifyOTP->createToken('Personal Access Token');
+            $token=$tokenResult->accessToken;
+        return $this->jsonResponse(['access_token'=>$token],"Your have been register successfully",false);
     }
 
     public function userProfileUpdate(Request $request){
@@ -188,7 +197,7 @@ class UserController extends Controller
         }
         $verifyOTP = User::where([['phone',$request->phone],['phone_otp',$request->otp_code]])->where('phone_otp_expired_at','>',Carbon::now())->first();
         if (is_null($verifyOTP)){
-            return $this->jsonResponse([],'opt verified failed or expire');
+            return $this->jsonResponse([],'otp verified failed or expire');
         }
         else{
             $verifyOTP->phone_otp = null;
@@ -217,7 +226,7 @@ class UserController extends Controller
     }
 
     //    For user login
-    public function login(Request $request){
+    public function login(Request $request){ 
         $validator=Validator::make($request->all(), [
             'uname'=>'required|string',
             'password'=>'required|string',
@@ -238,7 +247,7 @@ class UserController extends Controller
             $credentials['email']=$request->uname;
             $validationType = 'email';
         }
-
+        // dd($credentials);
         if (!Auth::attempt($credentials)){
             return $this->jsonResponse([],'Invalid login',true);
         }

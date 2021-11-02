@@ -14,13 +14,22 @@ class KrishiProductCategoryResource extends JsonResource
      */
     public function toArray($request)
     {
+        $subCategory = [];
+        foreach($this->childs as $i=>$row){
+            $subCategory[] = [
+                "sub_id" => $row->id,
+                "parent_id" => $row->parent_id,
+                "sub_name" => $row->name,
+                "sub_slug" => $row->slug,
+            ];
+        }
+
         return [
             'id' => $this->id,
             'name' => $this->name,
             'slug' => $this->slug,
-            'icon' => $this->icon,
-            'product'   => $this->productqty,
-            'thumbnail_image' => asset('images/avatar-product.png'),//(!is_null($this->thumbnail_image)) ? \Storage::url($this->thumbnail_image) : asset('images/avatar-product.png'),//category-thumb.jpg
+            'subcategory' => $subCategory,
         ];
+ 
     }
 }

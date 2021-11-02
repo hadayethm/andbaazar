@@ -68,7 +68,10 @@ Route::group(['prefix'=>'v-1','namespace'=>'Api'],function (){
             Route::get('/parent-categories/{slug}','SiteInfoController@getParentCategories');
             Route::get('/search','SiteInfoController@search');
             Route::get('/shops','SiteInfoController@shops');
+            Route::get('/shops-info/{slug}','SiteInfoController@shopInfo');
+            Route::get('/shop-product-details/{slug}','SiteInfoController@productDetails');
             Route::get('/shop-products/{slug}','SiteInfoController@shopProducts');
+            Route::get('/krishi-bazar-slider','SiteInfoController@sliderList');
         });
 
         //     For product info

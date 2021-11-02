@@ -12,6 +12,14 @@ trait apiTrait {
         ]);
     }
 
+    public function jsonResponseFaild($msg="success",$status = false,$code=''){
+        return response()->json([  
+            'msg' => $msg,
+            'error' => $status,
+            'code' => $code,
+        ]);
+    }
+
     public function generateCategories($categories,$arr = []){
         foreach ($categories as $category) {
             if (count($category->childs) > 0) {
