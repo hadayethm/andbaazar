@@ -12,6 +12,7 @@ use App\Models\KrishiReviews;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Validator;
+use Illuminate\Pagination\Paginator;
 
 class KrishiProductController extends Controller
 {
@@ -33,6 +34,7 @@ class KrishiProductController extends Controller
             return $this->jsonResponse([],'No product found',true);
         }
         $related_products = KrishiProduct::where([['id','!=',$product_details->id],['category_id',$product_details->category_id],['status','Active'],['available_stock','>',0]])->whereDate('available_from','<=', Carbon::now())->take(10)->get();
+        
         return new KrishiProductCollection($related_products);
     }
 
@@ -41,16 +43,19 @@ class KrishiProductController extends Controller
         if (is_null($product_details)){
             return $this->jsonResponse([],'No product found',true);
         }
-        // $limit = 20;
-        // if($request->limit){
-        //     $limit = $request->limit;
-        // }
-        $reviews = KrishiReviews::where('krishi_product_id',$product_details->id)->where('parent_id',0)->get();
+        $limit = 20;
+        if($request->limit){
+            $limit = $request->limit;
+        }
+        $paginationMeta = ['limit'=>$limit];
+        $reviews = KrishiReviews::where('krishi_product_id',$product_details->id)->where('parent_id',0);
+      
         if (is_null($reviews)){
             return $this->jsonResponse([],'No product found',true);
         }
+        $reviews = $reviews->paginate($limit);
         
-        // $reviews->appends(['productId' => $request->productId, 'limit'=>$limit]);
+        $reviews->appends($paginationMeta);
         $data =  new KrishiProductReviewCollection($reviews);
         return $this->jsonResponse($data,'success',false);
     }

@@ -142,7 +142,20 @@ class SiteInfoController extends Controller
     }
 
     public function topRatedProducts(){
+        
+        $topRatedProducts = KrishiProduct::where([['status','Active'],['available_stock','>',0]])->whereDate('available_from','>=', Carbon::now())->where('total_unit_sold','>=',20)->orderBy('available_from')->take(10)->get();
+        if (is_null($topRatedProducts)){
+            return $this->jsonResponseFaild('Top rated product not found',false,404);
+        }
+        return new KrishiProductCollection($topRatedProducts);
+    }
 
+    public function featuredProducts(){
+        $featureProducts = KrishiProduct::where([['status','Active'],['available_stock','>',0]])->where('total_order_no','>=',20)->orderBy('available_from')->take(10)->get();
+        if (is_null($featureProducts)){
+            return $this->jsonResponseFaild('Top rated product not found',false,404);
+        }
+        return new KrishiProductCollection($featureProducts);
     }
 
     public function CategoryWiseProducts(Request $request,$parentCategory){
