@@ -24,7 +24,7 @@ class SiteInfoController extends Controller
 {
     use apiTrait;
     public function productCategories(){
-        $list = KrishiCategory::select('id', 'name', 'slug')->where(['parent_id' => 0,'active' => 1])->orderBy('id', 'desc')->get();
+        $list = KrishiCategory::select('id', 'name', 'slug')->where(['parent_id' => 0,'active' => 1])->orderBy('id', 'ASC')->get();
         
         return new KrishiProductCategoryCollection( $list );
     }
@@ -94,7 +94,7 @@ class SiteInfoController extends Controller
     }
 
     public function flashDealProducts(){
-        $flashSaleSetting=FlashSellSetting::whereTime('start_time','<=',Carbon::now())->whereTime('end_time','>=',Carbon::now())->where('status',1)->first();
+        $flashSaleSetting=FlashSellSetting::whereTime('start_time','<=',Carbon::now())->whereTime('end_time','<=',Carbon::now())->where('status',1)->first();
         if (is_null($flashSaleSetting)){
             return $this->jsonResponse([],'No flash sale found', true);
         }
@@ -137,7 +137,7 @@ class SiteInfoController extends Controller
     }
 
     public function upcomingProducts(){
-        $upcomingProducts = KrishiProduct::where([['status','Active'],['available_stock','>',0]])->whereDate('available_from','>', Carbon::now())->orderBy('available_from')->take(8)->get();
+        $upcomingProducts = KrishiProduct::where([['status','Pending'],['available_stock','>',0]])->whereDate('available_from','>=', Carbon::now())->orderBy('available_from')->take(8)->get();
         return new KrishiProductCollection($upcomingProducts);
     }
 
