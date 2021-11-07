@@ -18,6 +18,7 @@ Route::group(['prefix'=>'v-1','namespace'=>'Api'],function (){
     Route::post('/registration','UserController@registration');
     Route::post('/login','UserController@login');
     Route::post('/forget-password','UserController@forgetPassword');
+    Route::post('/forgot-otp-varify','UserController@forgorOTPVarify');
     Route::post('/user-verify-otp','UserController@sendVerifyOTP');
     Route::post('/user-verify-email-link','UserController@sendEmailVerificationLink');
     Route::post('/verify-otp','UserController@verifyOTP');
@@ -26,6 +27,7 @@ Route::group(['prefix'=>'v-1','namespace'=>'Api'],function (){
         //   For User Authentication
         Route::get('/profile','UserController@profile');
         Route::post('/profile-update','UserController@userProfileUpdate');
+        Route::post('/update-password','UserController@updatePassword');
         Route::post('/reset-password','UserController@resetPassword');
         Route::post('/change-password','UserController@changePassword');
         Route::get('/logout','UserController@logout');

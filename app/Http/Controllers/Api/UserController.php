@@ -64,15 +64,16 @@ class UserController extends Controller
 
         //Now Send the OTP code via SMS Gateway
         $user->notify(new PhoneVerification($user));
-        $userOtp = $user->phone_otp; 
-        $verifyOTP = User::where([['phone',$request->phone],['phone_otp',$userOtp]])->where('phone_otp_expired_at','>',Carbon::now())->first();
-        $verifyOTP->phone_otp = null;
-            $verifyOTP->phone_otp_expired_at = null;
-            $verifyOTP->phone_no_verified_at = Carbon::now();
-            $verifyOTP->save();
-            $tokenResult=$verifyOTP->createToken('Personal Access Token');
-            $token=$tokenResult->accessToken;
-        return $this->jsonResponse(['access_token'=>$token],"Your have been register successfully",false);
+        // $userOtp = $user->phone_otp; 
+        // $verifyOTP = User::where([['phone',$request->phone],['phone_otp',$userOtp]])->where('phone_otp_expired_at','>',Carbon::now())->first();
+        // $verifyOTP->phone_otp = null;
+        //     $verifyOTP->phone_otp_expired_at = null;
+        //     $verifyOTP->phone_no_verified_at = Carbon::now();
+        //     $verifyOTP->save();
+        //     $tokenResult=$verifyOTP->createToken('Personal Access Token');
+        //     $token=$tokenResult->accessToken;
+        // return $this->jsonResponse(['access_token'=>$token],"Your have been register successfully",false);
+        return $this->jsonResponse([],"Your have been register successfully",false);
     }
 
     public function userProfileUpdate(Request $request){
@@ -133,7 +134,7 @@ class UserController extends Controller
     }
 
     //    Forget Password
-    public function forgetPassword(Request $request){
+    public function forgetPassword(Request $request){ 
         $validator=Validator::make($request->all(), [
             'phone'=>'required|numeric|exists:users,phone',
         ]);
@@ -296,4 +297,31 @@ class UserController extends Controller
         $request->user()->token()->revoke();
         return $this->jsonResponse([],'You logout successfully',false);
     }
+    //Forgot OTP Verify
+    public function forgorOTPVarify(Request $request){
+        $validator=Validator::make($request->all(), [
+            'phone'=>'required|numeric|exists:users,phone',
+            'otp_code'=>'required|string'
+        ]);
+
+        if ($validator->fails()){
+            return $this->jsonResponse([],$validator->getMessageBag()->first());
+        }
+        $verifyOTP = User::where([['phone',$request->phone],['phone_otp',$request->otp_code]])->where('phone_otp_expired_at','>',Carbon::now())->first();
+        if (is_null($verifyOTP)){
+            return $this->jsonResponse([],'otp verified failed or expire');
+        }
+        else{
+            $verifyOTP->phone_otp = null;
+            $verifyOTP->phone_otp_expired_at = null;
+            $verifyOTP->phone_no_verified_at = Carbon::now();
+            $verifyOTP->save();
+            $tokenResult=$verifyOTP->createToken('Personal Access Token');
+            $token=$tokenResult->accessToken;
+            return $this->jsonResponse(['access_token'=>$token],"Authenticated successfully",false);
+        }
+    }
+
+    //Forgot password update
+    // public funci
 }
