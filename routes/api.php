@@ -48,6 +48,11 @@ Route::group(['prefix'=>'v-1','namespace'=>'Api'],function (){
 
         //Shipping address
         Route::post('create-shipping-address','Customer\CustomerAddressController@shippingAddress');
+
+        //Payment method
+        Route::get('bank-list','BankController@index');
+        Route::get('bank-branch-list','BankBranchController@index');
+        Route::post('payment-method','MethodPaymentController@store');
         //get Geo Address
         Route::get('divisions','GeoController@getDivisions');
         Route::get('districts','GeoController@getDistricts');

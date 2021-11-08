@@ -167,5 +167,14 @@ class User extends Authenticatable
       public function news(){
         return $this->hasOne(Newsfeed::class,'newsfeed_id');
       }
+      public function bank(){
+        return $this->hasMany(Bank::class);
+      }
+      public function bankbranch(){
+        return $this->hasMany(BankBranch::class);
+      }
+      public function method(){
+        return $this->hasOne(MethodPayment::class);
+    }
       protected $casts = ['business_types'=>'array', 'phone_otp_expired_at'=>'datetime', 'email_verified_at'=>'datetime', 'email_verification_code_expired_at'=>'datetime'];
     }
