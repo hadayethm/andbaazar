@@ -113,4 +113,178 @@ class CustomerAddressController extends Controller{
         }
         return $this->jsonResponse([],'Address not deleted');
     }
+
+    //Billing address
+    public function bllingAddress(Request $request){
+        $userId = auth()->user()->id; 
+        $userAddress = CustomerAddress::where('user_id',$userId)->where('is_default_billing',1)->first();
+        // dd($userAddress);
+        if(empty($userAddress)){
+            $validator = Validator::make($request->all(),[
+                'division_id'           => 'required',
+                'district_id'           => 'required',
+                'zip_code'              => 'required',
+                'address'               => 'required',
+                'name'                  => 'required',
+                'phone'                 => 'required',
+                'address_type'          => 'required',
+                'is_default_shipping'   => 'required',
+                'is_default_billing'    => 'required',
+            ]);
+            if($validator->fails()){
+                return $this->jsonResponse([],$validator->getMessageBag()->first());
+            }
+            $user = $request->user();
+            
+            // if($request->is_default_shipping === 1){
+            //     CustomerAddress::where('user_id',$user->id)->update(['is_default_shipping'=>0]);
+            // }
+            // if($request->is_default_billing === 1){
+            //     CustomerAddress::where('user_id',$user->id)->update(['is_default_billing'=>0]);
+            // }
+            $data = [
+                'division_id'         => $request->division_id,
+                'district_id'         => $request->district_id,
+                'zip_code'            => $request->zip_code,
+                'address'             => $request->address,
+                'name'                => $request->name,
+                'phone'               => $request->phone,
+                'address_type'        => $request->address_type, 
+                'is_default_shipping' => $request->is_default_shipping,
+                'is_default_billing'  => $request->is_default_billing,
+                'user_id'             => $userId,
+            ];
+            $address = CustomerAddress::create($data);
+            return $this->jsonResponse(new AddressResource($address),'Address create successfully',false);
+        }else{ 
+            $validator = Validator::make($request->all(),[ 
+                'division_id'           => 'required',
+                'district_id'           => 'required',
+                'zip_code'              => 'required',
+                'address'               => 'required',
+                'name'                  => 'required',
+                'phone'                 => 'required',
+                'address_type'          => 'required', 
+                'is_default_billing'    => 'required',
+            ]);
+            if($validator->fails()){
+                return $this->jsonResponse([],$validator->getMessageBag()->first());
+            }
+            $userId = auth()->user()->id;
+            
+            // if($request->is_default_shipping === 1){
+            //     CustomerAddress::where('user_id',$user->id)->update(['is_default_shipping'=>0]);
+            // }
+            // if($request->is_default_billing === 1){
+            //     CustomerAddress::where('user_id',$user->id)->update(['is_default_billing'=>0]);
+            // }
+            $data = [
+                'division_id'         => $request->division_id,
+                'district_id'         => $request->district_id,
+                'zip_code'            => $request->zip_code,
+                'address'             => $request->address,
+                'name'                => $request->name,
+                'phone'               => $request->phone,
+                'address_type'        => $request->address_type, 
+                'is_default_billing'  => $request->is_default_billing,
+                'user_id'             => $userId,
+            ];
+            // dd($data);
+            $address = CustomerAddress::where('user_id',$userId)->where('is_default_billing',1)->first();
+            // dd($address);
+            $address->update($data);
+            return $this->jsonResponse(new AddressResource($address->refresh()),'Address updated successfully',false);
+        } 
+    }
+
+    //Shipping Address
+    public function shippingAddress(Request $request){
+        $userId = auth()->user()->id; 
+        $userAddress = CustomerAddress::where('user_id',$userId)->where('is_default_shipping',1)->first();
+        // dd($userAddress);
+        if(empty($userAddress)){
+            $validator = Validator::make($request->all(),[
+                'division_id'           => 'required',
+                'district_id'           => 'required',
+                'zip_code'              => 'required',
+                'address'               => 'required',
+                'name'                  => 'required',
+                'phone'                 => 'required',
+                'address_type'          => 'required',
+                'is_default_shipping'   => 'required',
+                'is_default_billing'    => 'required',
+            ]);
+            if($validator->fails()){
+                return $this->jsonResponse([],$validator->getMessageBag()->first());
+            }
+            $user = $request->user();
+            
+            // if($request->is_default_shipping === 1){
+            //     CustomerAddress::where('user_id',$user->id)->update(['is_default_shipping'=>0]);
+            // }
+            // if($request->is_default_billing === 1){
+            //     CustomerAddress::where('user_id',$user->id)->update(['is_default_billing'=>0]);
+            // }
+            $data = [
+                'division_id'         => $request->division_id,
+                'district_id'         => $request->district_id,
+                'zip_code'            => $request->zip_code,
+                'address'             => $request->address,
+                'name'                => $request->name,
+                'phone'               => $request->phone,
+                'address_type'        => $request->address_type, 
+                'is_default_shipping' => $request->is_default_shipping,
+                'is_default_billing'  => $request->is_default_billing,
+                'user_id'             => $userId,
+            ];
+            $address = CustomerAddress::create($data);
+            return $this->jsonResponse(new AddressResource($address),'Address create successfully',false);
+        }else{ 
+            $validator = Validator::make($request->all(),[ 
+                'division_id'           => 'required',
+                'district_id'           => 'required',
+                'zip_code'              => 'required',
+                'address'               => 'required',
+                'name'                  => 'required',
+                'phone'                 => 'required',
+                'address_type'          => 'required', 
+                'is_default_shipping'   => 'required',
+                'is_default_billing'    => 'required',
+            ]);
+            if($validator->fails()){
+                return $this->jsonResponse([],$validator->getMessageBag()->first());
+            }
+            $userId = auth()->user()->id;
+            
+            // if($request->is_default_shipping === 1){
+            //     CustomerAddress::where('user_id',$user->id)->update(['is_default_shipping'=>0]);
+            // }
+            // if($request->is_default_billing === 1){
+            //     CustomerAddress::where('user_id',$user->id)->update(['is_default_billing'=>0]);
+            // }
+            $data = [
+                'division_id'         => $request->division_id,
+                'district_id'         => $request->district_id,
+                'zip_code'            => $request->zip_code,
+                'address'             => $request->address,
+                'name'                => $request->name,
+                'phone'               => $request->phone,
+                'address_type'        => $request->address_type, 
+                'is_default_shipping' => $request->is_default_shipping, 
+                'user_id'             => $userId,
+            ];
+            // dd($data);
+            $address = CustomerAddress::where('user_id',$userId)->where('is_default_shipping',1)->first();
+            // dd($address);
+            $address->update($data);
+            return $this->jsonResponse(new AddressResource($address->refresh()),'Address updated successfully',false);
+        } 
+    }
+
+    public function addressList(Request $request){
+        $user = $request->user();
+        $address = CustomerAddress::where('user_id',$user->id)->get();
+        return $this->jsonResponse(new AddressCollection($address),'success',false);
+    }
+
 }

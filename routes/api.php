@@ -35,9 +35,19 @@ Route::group(['prefix'=>'v-1','namespace'=>'Api'],function (){
         //Address
         Route::get('address-book','Customer\CustomerAddressController@index');
         Route::delete('delete-address/{id}','Customer\CustomerAddressController@delete');
-        Route::post('create-address','Customer\CustomerAddressController@createAddress');
+        Route::post('create-address','Customer\CustomerAddressController@createAddress'); 
         Route::put('update-address/{id}','Customer\CustomerAddressController@updateAddress');
+        Route::get('user-address-list','Customer\CustomerAddressController@addressList');
 
+        // Wallet System
+        Route::post('add-balance-request','WalletController@AddBalance');
+        Route::get('wallet-transactions','WalletController@walletTransaction');
+
+        //billing address
+        Route::post('create-billing-address','Customer\CustomerAddressController@bllingAddress');
+
+        //Shipping address
+        Route::post('create-shipping-address','Customer\CustomerAddressController@shippingAddress');
         //get Geo Address
         Route::get('divisions','GeoController@getDivisions');
         Route::get('districts','GeoController@getDistricts');

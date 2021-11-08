@@ -297,6 +297,7 @@ class UserController extends Controller
         $request->user()->token()->revoke();
         return $this->jsonResponse([],'You logout successfully',false);
     }
+    
     //Forgot OTP Verify
     public function forgorOTPVarify(Request $request){
         $validator=Validator::make($request->all(), [
@@ -323,5 +324,25 @@ class UserController extends Controller
     }
 
     //Forgot password update
-    // public funci
+    public function updatePassword(Request $request){ 
+        $validator=Validator::make($request->all(), [
+            'password'  => 'required|min:8',
+            'rpassword' => 'required|same:password',
+        ]);
+
+        $user = auth()->user()->id;
+       
+       
+
+        if ($validator->fails()){
+            return $this->jsonResponse([],$validator->getMessageBag()->first());
+        }
+        else{ 
+            User::where('id',$user)->update([
+                'password' => Hash::make($request->password)
+            ]);
+        }
+
+        return $this->jsonResponse("Password update successfully",false);
+    }
 }
