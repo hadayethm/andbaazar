@@ -45,14 +45,23 @@ Route::group(['prefix'=>'v-1','namespace'=>'Api'],function (){
 
         //billing address
         Route::post('create-billing-address','Customer\CustomerAddressController@bllingAddress');
+        Route::put('update-billing-address/{id}','Customer\CustomerAddressController@updateBllingAddress');
+        Route::delete('delete-billing-address/{id}','Customer\CustomerAddressController@deleteBillingAddress');
 
         //Shipping address
         Route::post('create-shipping-address','Customer\CustomerAddressController@shippingAddress');
+        Route::put('update-shipping-address/{id}','Customer\CustomerAddressController@updateShippingAddress');
+        Route::delete('delete-shipping-address/{id}','Customer\CustomerAddressController@deleteShippinggAddress');
 
         //Payment method
         Route::get('bank-list','BankController@index');
         Route::get('bank-branch-list','BankBranchController@index');
         Route::post('payment-method','MethodPaymentController@store');
+
+        //Place order
+        Route::get('division-wise-district','Customer\CustomerAddressController@getDistric');
+        Route::get('district-wise-upazila','Customer\CustomerAddressController@getUpazila');
+        Route::get('upazila-wise-union','Customer\CustomerAddressController@getUnion'); 
         //get Geo Address
         Route::get('divisions','GeoController@getDivisions');
         Route::get('districts','GeoController@getDistricts');
