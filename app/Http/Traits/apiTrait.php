@@ -29,4 +29,10 @@ trait apiTrait {
         }
         return $arr;
     }
+
+    public function orderNumber($keyword){
+        $orderNumber = $keyword.mt_rand(1000000,9999999);
+
+        return $orderNumber;
+    }
 }

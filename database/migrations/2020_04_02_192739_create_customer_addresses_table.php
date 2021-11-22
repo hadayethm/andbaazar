@@ -15,6 +15,8 @@ class CreateCustomerAddressesTable extends Migration
     {
         Schema::create('customer_addresses', function (Blueprint $table) {
             $table->id();
+            $table->string('first_name',100)->nullable();
+            $table->string('last_name',100)->nullable();
             $table->foreignId('user_id')->constrained('users')->references('id')->onDelete('cascade')->comment('as customer id');
             $table->foreignId('division_id')->nullable()->constrained('divisions')->references('id')->onDelete('cascade');
             $table->integer('district_id')->nullable()->constrained('districts')->references('id')->onDelete('cascade');
@@ -28,6 +30,12 @@ class CreateCustomerAddressesTable extends Migration
             $table->enum('address_type',['Home','Office'])->default('Home');
             $table->boolean('is_default_shipping')->default(1)->comment('1 for allowed, 0 for not allowed');
             $table->boolean('is_default_billing')->default(1)->comment('1 for allowed, 0 for not allowed');
+            $table->string('postal_code',20)->nullable();
+            $table->string('email',100)->nullable();
+            $table->string('house_number',20)->nullable();
+            $table->string('floor_number',20)->nullable();
+            $table->string('street_address',50)->nullable();
+            $table->text('note')->nullable();
             $table->timestamps();
             $table->foreign('upazila_id')->references('id')->on('upazilas')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('union_id')->references('id')->on('unions')->onUpdate('cascade')->onDelete('cascade');

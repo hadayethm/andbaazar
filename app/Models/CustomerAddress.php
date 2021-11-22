@@ -12,6 +12,8 @@ use Illuminate\Database\Eloquent\Model;
 class CustomerAddress extends Model
 {
     protected $fillable = [
+        'first_name',
+        'last_name',
         'user_id',
         'division_id',
         'district_id',
@@ -24,7 +26,13 @@ class CustomerAddress extends Model
         'phone',
         'address_type',
         'is_default_shipping',
-        'is_default_billing'
+        'is_default_billing',
+        'postal_code',
+        'email',
+        'house_number',
+        'floor_number',
+        'street_address',
+        'note'
     ];
 
     public function division(){

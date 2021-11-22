@@ -98,7 +98,8 @@ class SiteInfoController extends Controller
         if (is_null($flashSaleSetting)){
             return $this->jsonResponse([],'No flash sale found', true);
         }
-        $flashSaleProducts = KrishiProduct::where([['allow_flash_sale',1],['status','Active'],['available_stock','>',0]])->whereDate('available_from','<=', Carbon::now())->take(10)->get();
+        // $flashSaleProducts = KrishiProduct::where([['allow_flash_sale',1],['status','Active'],['available_stock','>',0]])->whereDate('available_from','<=', Carbon::now())->take(10)->get();
+        $flashSaleProducts = KrishiProduct::where([['allow_flash_sale',1],['available_stock','>',0]])->whereDate('available_from','<=', Carbon::now())->take(4)->orderBy('id','DESC')->get();
         $data = new KrishiProductFlashSaleCollection($flashSaleProducts);
         return $this->jsonResponse([
             'flash' => [
@@ -111,20 +112,31 @@ class SiteInfoController extends Controller
     }
 
     public function bestSellerProducts(){
-        $bestSellerProducts= KrishiProduct::select('*', DB::raw('SUM(total_unit_sold) as total_sold'))
-            ->where([['status','Active'],['available_stock','>',0]])
-            ->orderBy('total_sold','desc')
+        // $bestSellerProducts= KrishiProduct::select('*', DB::raw('SUM(total_unit_sold) as total_sold'))
+        //     ->where([['status','Active'],['available_stock','>',0]])
+        //     ->orderBy('total_sold','desc')
+        //     ->take(10)->get();
+        $bestSellerProducts= KrishiProduct::
+            where([['status','Active'],['available_stock','>',0]])
+            ->orderBy('id','desc')
             ->take(10)->get();
             return new KrishiProductCollection($bestSellerProducts);
     }
 
     public function popularCategories(){
+        // $popularProducts = KrishiProduct::select('category_id', DB::raw('SUM(total_unit_sold) as total_sold'))
+        //     ->where([['status','Active']])
+        //     ->groupBy('category_id')
+        //     ->orderBy('total_sold','desc')
+        //     ->take(6)->get()
+        //     ->pluck('category_id')->all();
         $popularProducts = KrishiProduct::select('category_id', DB::raw('SUM(total_unit_sold) as total_sold'))
-            ->where([['status','Active']])
-            ->groupBy('category_id')
-            ->orderBy('total_sold','desc')
-            ->take(6)->get()
-            ->pluck('category_id')->all();
+        ->where([['status','Active']])
+        ->groupBy('category_id')
+        ->orderBy('total_sold','desc')
+        ->whereIn('category_id', [16, 42, 46, 51, 424, 429])
+        ->take(6)->get()
+        ->pluck('category_id');
         $popularCategories = KrishiCategory::whereIn('id',$popularProducts)->where('active',1)->get();
         return new KrishiProductCategoryCollection($popularCategories);
     }
@@ -137,13 +149,14 @@ class SiteInfoController extends Controller
     }
 
     public function upcomingProducts(){
-        $upcomingProducts = KrishiProduct::where([['status','Pending'],['available_stock','>',0]])->whereDate('available_from','>=', Carbon::now())->orderBy('available_from')->take(8)->get();
+        // $upcomingProducts = KrishiProduct::where([['status','Pending'],['available_stock','>',0]])->whereDate('available_from','<=', Carbon::now())->orderBy('available_from')->take(8)->get();
+        $upcomingProducts = KrishiProduct::where([['status','Pending'],['available_stock','>',0]])->orderBy('available_from')->take(8)->get();
         return new KrishiProductCollection($upcomingProducts);
     }
 
     public function topRatedProducts(){
         
-        $topRatedProducts = KrishiProduct::where([['status','Active'],['available_stock','>',0]])->whereDate('available_from','>=', Carbon::now())->where('total_unit_sold','>=',20)->orderBy('available_from')->take(10)->get();
+        $topRatedProducts = KrishiProduct::where([['status','Active'],['available_stock','>',0]])->whereDate('available_from','<=', Carbon::now())->orderBy('available_from')->take(10)->get();
         if (is_null($topRatedProducts)){
             return $this->jsonResponseFaild('Top rated product not found',false,404);
         }

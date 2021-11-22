@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Storage;
 
 class KrishiProductCategoryResource extends JsonResource
 {
@@ -28,6 +29,7 @@ class KrishiProductCategoryResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'slug' => $this->slug,
+            'thumbnail_image' => (!is_null($this->thumbnail_image)) ? $this->thumbnail_image : asset('images/avatar-product.png'),
             'subcategory' => $subCategory,
         ];
  

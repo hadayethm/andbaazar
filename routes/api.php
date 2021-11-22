@@ -44,24 +44,28 @@ Route::group(['prefix'=>'v-1','namespace'=>'Api'],function (){
         Route::get('wallet-transactions','WalletController@walletTransaction');
 
         //billing address
-        Route::post('create-billing-address','Customer\CustomerAddressController@bllingAddress');
-        Route::put('update-billing-address/{id}','Customer\CustomerAddressController@updateBllingAddress');
-        Route::delete('delete-billing-address/{id}','Customer\CustomerAddressController@deleteBillingAddress');
+        Route::post('billing-address','Customer\CustomerAddressController@bllingAddress'); 
+        Route::get('billing-address-info','Customer\CustomerAddressController@bllingAddressInfo');
 
         //Shipping address
-        Route::post('create-shipping-address','Customer\CustomerAddressController@shippingAddress');
-        Route::put('update-shipping-address/{id}','Customer\CustomerAddressController@updateShippingAddress');
-        Route::delete('delete-shipping-address/{id}','Customer\CustomerAddressController@deleteShippinggAddress');
-
+        Route::post('shipping-address','Customer\CustomerAddressController@shippingAddress');
+        Route::get('shipping-address-info','Customer\CustomerAddressController@shippingAddressInfo');
+        
         //Payment method
         Route::get('bank-list','BankController@index');
         Route::get('bank-branch-list','BankBranchController@index');
         Route::post('payment-method','MethodPaymentController@store');
 
-        //Place order
+        //customer location
         Route::get('division-wise-district','Customer\CustomerAddressController@getDistric');
         Route::get('district-wise-upazila','Customer\CustomerAddressController@getUpazila');
         Route::get('upazila-wise-union','Customer\CustomerAddressController@getUnion'); 
+
+        //place order
+        Route::post('krishi-product-place-order','KrishiProduct\KrishiOrderPlaceController@store');
+        Route::get('krishi-order-list','KrishiProduct\KrishiOrderPlaceController@index');
+        Route::get('krishi-order-details','KrishiProduct\KrishiOrderPlaceController@orderDetails');
+
         //get Geo Address
         Route::get('divisions','GeoController@getDivisions');
         Route::get('districts','GeoController@getDistricts');
@@ -98,13 +102,15 @@ Route::group(['prefix'=>'v-1','namespace'=>'Api'],function (){
             Route::get('/shops-info/{slug}','SiteInfoController@shopInfo');
             Route::get('/shop-product-details/{slug}','SiteInfoController@productDetails');
             Route::get('/shop-products/{slug}','SiteInfoController@shopProducts');
-            Route::get('/krishi-bazar-slider','SiteInfoController@sliderList');
+            Route::get('/krishi-bazar-slider','SiteInfoController@sliderList'); 
         });
 
         //     For product info
         Route::get('/product-details/{slug}','KrishiProductController@product_details');
         Route::get('/product-reviews/{slug}','KrishiProductController@product_reviews');
         Route::get('/related-products/{slug}','KrishiProductController@related_products');
+
+         
 
     });
 });

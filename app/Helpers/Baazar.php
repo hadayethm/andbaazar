@@ -368,4 +368,8 @@ class Baazar
         $level = ['municipal_ward_level','municipal_level','district_level','division_level'];
         return $this->findAgentTree($village_or_ward_id,$leaf,$level);
     }
+
+    public function orderNumber(){
+        dd('hi');
+    }
 }

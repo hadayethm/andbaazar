@@ -94,6 +94,7 @@ class KrishiProductCategoryController extends Controller
     public function edit($id)
     {
         $krishi_category=KrishiCategory::with('parent')->where('id',$id)->firstOrFail();
+        // dd($krishi_category);
         $categories = KrishiCategory::with('childs')->where([['parent_id',0],['active',1]])->get();
         return view('admin.krishi_baazar.category.edit',compact('krishi_category','categories'));
     }
