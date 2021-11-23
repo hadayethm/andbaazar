@@ -3,12 +3,12 @@
     <div class="dashboard-sidebar">
         <div class="profile-top">
             <div class="profile-image">
-                <img id="shop-img-sidebar" src="{{!empty($shop->logo) ? asset($shop->logo) : asset('/images/avatar-shop.png')}}" alt="" class="img-fluid">
+                <img id="shop-img-sidebar" src="{{asset('/images/user.png')}}" alt="" class="img-fluid">
             </div>
             <div class="profile-detail">
-                <h5><a href="{{ url('merchant/shop') }}">{{ $shop->name }}</a></h5>
-                <h6>750 followers | 10 review</h6>
-                <h6>{{ $shop->email }}</h6>
+                <h3 style="font-weight: 800;" class="mb-1"><a href="#!">Abu Musa</a></h3>
+                <h6 class="mb-0">+880 17362634545</h6>
+                <h6 class="mb-0">abumuusa31@gmail.com</h6>
             </div>
         </div>
         <div class="faq-tab">
