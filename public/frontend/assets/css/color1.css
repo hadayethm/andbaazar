@@ -6922,7 +6922,7 @@ footer {
     margin: 40px 0; }
 
 .breadcrumb-section {
-  background-color: #f8f8f8;
+  background-color: #f2f2f2 !important;
   padding: 30px 0; }
   .breadcrumb-section .page-title {
     display: -webkit-box;
@@ -9562,10 +9562,10 @@ footer {
   position: sticky;
   top: 30px;
   z-index: 1;
-  padding: 0px 0 15px 0;
+  padding: 0px 0 15px 0 !important;
   background-color: #f8f8f8; }
   .dashboard-section .dashboard-sidebar .profile-top {
-    padding: 30px 16px 25px 16px;
+    padding: 0px 16px 25px 16px;
     margin-bottom: calc(10px + (20 - 10) * ((100vw - 320px) / (1920 - 320)));
     background: #f7f2f2; }
     .dashboard-section .dashboard-sidebar .profile-top .profile-image {
@@ -9774,7 +9774,8 @@ footer {
       -webkit-transition: all 0.5s ease;
       transition: all 0.5s ease;
       border-radius: 0;
-      background-color: #f8f8f8; }
+      background-color: #f8f8f8;
+      padding: 10px 30px; }
       .faq-tab .nav-tabs .nav-item .nav-link.active {
         border: none;
         border-right: 2px solid var(--theme-deafult);
@@ -18562,3 +18563,144 @@ body.dark {
         width: 15px;
         margin-right: 10px;
     }
+
+    /* ---Custom Css--- */
+    .dashboard_top_area{
+      background: #f7f2f2;
+      padding: 15px 20px;
+      margin-bottom: 30px;
+    }
+    .choose_sellect{
+       display: flex;
+      align-items: center;
+      justify-content:flex-end;
+    }
+    .choose_sellect .form-control{
+      border: 1px solid #ffbcbc;
+    }
+    .form-control:focus {
+      color: #495057;
+      background-color: #fff;
+      border-color: red;
+      outline: 0;
+      box-shadow:none;
+  }
+  .dasgboard_items_card{
+    padding: 20px 20px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin-bottom: 30px;
+    border-radius: 5px;
+  }
+  .counter-section .one_bg{
+    background-image: url('../images/color1.png');
+  }
+  .counter-section .two_bg{
+    background-image: url('../images/color2.png');
+  }
+    .counter-section .three_bg{
+    background-image: url('../images/color3.png');
+  }
+    .counter-section .four_bg{
+    background-image: url('../images/color4.png');
+  }
+    .counter-section .five_bg{
+    background-image: url('../images/color5.png');
+  }
+    .counter-section .six_bg{
+    background-image: url('../images/color6.png');
+  }
+  .dasgboard_items_card h1{
+color: #fff;
+font-size: 40px;
+  }
+  .dasgboard_items_card p{
+    color: #fff;
+    font-size: 18px;
+    margin: 0;
+  }
+
+    .order_items_card{
+    padding: 20px 20px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    position: relative;
+    margin-bottom: 30px;
+    border-radius: 5px;
+  }
+  .order_outline .one_bg{
+    background: #5b5bff;
+  }
+  .order_outline .two_bg{
+    background: #ff5b5b;
+  }
+  .order_outline .three_bg{
+    background: #0a967c
+  }
+  .order_outline .four_bg{
+    background: #81ba00;
+  }
+  .order_outline .five_bg{
+    background: #ff8084;
+  }
+  .order_outline .six_bg{
+    background: #f35bfd;
+  }
+  .order_items_card h3{
+    color: #fff;
+  }
+  .order_items_card p{
+    color: #fff;
+  }
+  .order_items_card i{
+    position: absolute;
+    right: 34px;
+    font-size: 75px;
+    top: 15px;
+    color: white;
+  }
+  .dashboard-section .nav-tabs .nav-item .nav-link{
+    background-color: #fff !important;
+    box-shadow: 1px 5px 24px 0 rgb(68 102 242 / 5%)!important;;
+  }
+  .dashboard-section .dashboard-sidebar .profile-top{
+    margin: 0 !important;
+    padding: 40px 16px !important;
+  }
+  .search_date_area{
+    padding: 30px 30px 0px 30px;
+  }
+  .ordr_Tables tr td{
+    font-size: 16px;
+  }
+
+  .dashboard-section.page-wrapper .page-body-wrapper .page-sidebar {
+    width: 100%;
+    position: sticky;
+    background: #ffffff;
+    top: 30;
+    height:100%;
+    z-index: 9;
+    -webkit-transition: 0.3s;
+    transition: 0.3s;
+}
+.page-sidebar .ares_img_fixed .nav-item img{
+width: 20px;
+margin-right: 15px;
+}
+.dashboard-section.page-wrapper .page-body-wrapper .page-sidebar .sidebar-menu {
+  list-style: none;
+  margin: 0;
+  padding: 0px;
+}
+.dashboard-section.page-wrapper .page-body-wrapper .page-sidebar .sidebar-menu .sidebar-header {
+  font-size: 14px;
+  letter-spacing: 0.5px;
+  padding-bottom: 12px;
+  padding-top: 12px;
+  text-transform: capitalize;
+  font-weight: 400;
+  color: #ff8084;
+}

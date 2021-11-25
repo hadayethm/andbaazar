@@ -11,7 +11,7 @@
                 <h6 class="mb-0">abumuusa31@gmail.com</h6>
             </div>
         </div>
-        <div class="faq-tab">
+        <div class=" page-body-wrapper">
             @include('merchant.partials.'.session()->get('default_service').'.left-sidebar')
 {{--            <ul class="nav nav-tabs" id="top-tab" role="tablist">--}}
 {{--                <li class="nav-item {{$active == 'dashboard' ? 'active' : ''}}"><a  class="nav-link  {{$active == 'dashboard' ? 'active' : ''}}" href="{{ url('merchant/dashboard') }}">dashboard</a></li>--}}
